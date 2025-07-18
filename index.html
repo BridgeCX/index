@@ -58,9 +58,44 @@
 <body>
   <h1 class="glow">BridgeCX.ai</h1>
   <p>Where AI meets human empathy — transforming customer service for a smarter tomorrow.</p>
-<form class="email-signup" action="https://formspree.io/f/xnnznbjd" method="POST">
+<form id="notify-form" class="email-signup" action="https://formspree.io/f/xnnznbjd" method="POST">
   <input type="email" name="email" placeholder="Enter your email" required />
   <button type="submit">Notify Me</button>
+  <p id="form-message" style="margin-top: 1em; font-size: 1em;"></p>
 </form>
+
+<script>
+  const form = document.getElementById('notify-form');
+  const message = document.getElementById('form-message');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const data = new FormData(form);
+    const action = form.getAttribute('action');
+
+    try {
+      const res = await fetch(action, {
+        method: 'POST',
+        body: data,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (res.ok) {
+        message.textContent = '✅ Thank you! You’ll be notified.';
+        message.style.color = '#00ffe7';
+        form.reset();
+      } else {
+        message.textContent = '❌ Oops! Something went wrong. Please try again.';
+        message.style.color = '#ff6464';
+      }
+    } catch (error) {
+      message.textContent = '❌ Network error. Please check your connection.';
+      message.style.color = '#ff6464';
+    }
+  });
+</script>
+
 </body>
 </html>
